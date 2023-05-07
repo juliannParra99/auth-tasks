@@ -1,8 +1,7 @@
 <h1>Sing up</h1>
-
-<!-- el action= "/sign up/"" indica que los datos del formulario se van a enviar a esta misma pagin: no tiene mucho sentido ahora, por que lo logico es que trabajemos con esos datos en otros lugares; y agregamos el metodo post que indica que los datos no se van a mandar a traves de la url contenido sensible como por ejempl las contraseñas etc.-->
+<!-- muestra el error si existe: viene desde la lista que colocamos en views.py -->
+{{error}}
 <form action="/signup/" method="POST">
-    <!-- genera un token que indica que el formulario fue creado por nuestro servidor y no por otro: genera un mecanismo de seguridad por si la pagina es clonada, evita que se envien peticiones a nuestro servidor si no tiene el token correspondiente:evita  hacks,etc -->
     {% csrf_token %}
 
     {{form.as_p}}
