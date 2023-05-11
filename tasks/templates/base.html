@@ -11,11 +11,13 @@
     <ul>
         <li><a href='/'>Home</a></li>
         <li><a href='/tasks'>Tasks</a></li>
-        <!-- con esto indico que si el usuario esta autenticado voy a poder ver el acceso a la pestaña logout, de lo contrario no la voy a poder ver: 'user' cundo estamos autenticados djngo cre un objeto global que todas las plantillas  pueden acceder, ese objeto es user ; si no esta autenticado muestra el  'Sign Up'-->
+        <!-- con esto indico que si el usuario esta autenticado voy a poder ver el acceso a la pestaña logout, de lo contrario no la voy a poder ver: 'user' cundo estamos autenticados djngo cre un objeto global que todas las plantillas  pueden acceder, ese objeto es user ; si no esta autenticado muestra el  'Sign Up' y el 'sign in'-->
         {% if user.is_authenticated %}
         <li><a href='/logout'>Log out</a></li>
         {% else %}
         <li><a href='/signup'>Sign Up</a></li>
+
+        <li><a href='/signin'>Sign In</a></li>
         {% endif %}
     </ul>
     <!-- esta es la plantilla que va a contener el contenido compartido por los demas html : lo que esta en medio de esas dos porciones de  codigo con llaves son  otras porciones de  interfaz-->
