@@ -1,0 +1,20 @@
+<!-- esta vista es para que el usuario pueda manejar sus tareas sin tener que recurrir al panel de administrador -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Create task</h1>
+
+<!-- con esto ya tengo un formulario para envirlo al backend-->
+<form action="/tasks/create/" method="POST">
+    {% csrf_token %}
+    
+    <!-- formulario  enviado desde views.py -->
+    {{form}}
+    <button>
+        Save
+    </button>
+</form>
+
+{% endblock %}

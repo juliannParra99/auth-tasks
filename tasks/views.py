@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from .forms import TaskForm
 
 # Create your views here.
 
@@ -42,14 +43,29 @@ def tasks(request):
     return render(request, 'tasks.html')
 
 
+def create_task(request):
+    if request.method == 'GET':
+        return render(request, 'create_task.html', {
+            "form": TaskForm,
+        })
+    else:
+        # con esto decimos que la peticion es de tipo posta me muestre en el print los datos que se enviaron.OSea si no es get, es post, y que me traiga esos datos: con esto ya tengo los datos para guardarlos en mi DB
+        print(request.POST)
+        return render(request, 'create_task.html', {
+            "form": TaskForm,
+        })
+
+
 def signout(request):
     logout(request)
     return redirect('home')
 
 # metodo para que el usuario se pueda autenticas (acceda a sus datos si tiene una cuenta ya creada)
-#si la solicitud a esa url es get muestro el formulario, si no, si es una solicutd post, verifico
-#si el usuario es none, osea si no existe, mando el error con el formulario, si existe lo envio a la 
-#pagina 'tasks' y guardo su session
+# si la solicitud a esa url es get muestro el formulario, si no, si es una solicutd post, verifico
+# si el usuario es none, osea si no existe, mando el error con el formulario, si existe lo envio a la
+# pagina 'tasks' y guardo su session
+
+
 def signin(request):
     if request.method == 'GET':
         return render(request, 'signin.html', {
@@ -65,7 +81,5 @@ def signin(request):
                 'error': " Username or password is incorrect"
             })
         else:
-            login(request,user)
+            login(request, user)
             return redirect('tasks')
-
-        
