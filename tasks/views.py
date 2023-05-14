@@ -49,11 +49,26 @@ def create_task(request):
             "form": TaskForm,
         })
     else:
-        # con esto decimos que la peticion es de tipo posta me muestre en el print los datos que se enviaron.OSea si no es get, es post, y que me traiga esos datos: con esto ya tengo los datos para guardarlos en mi DB
-        print(request.POST)
-        return render(request, 'create_task.html', {
-            "form": TaskForm,
-        })
+        try:
+            #con esto ya puedo guardar las tareas desde mi formulario: lo puedo ver desde
+            #el panel de administrador. Con esto  se crea una especie de formulario con los datos que yo le estoy enviando para crear la tarea
+            form = TaskForm(request.POST)
+            #print(form)#esto es para que se vea en el ejemplo que la tarea se muestra en la consola; lo comento pq no es seguro
+
+            #el formulario se crea para guardar los datos.
+            new_task = form.save(commit=False)
+            #el request.user es por que el modelo de nuestra tabla exigue un usuario que maneje las tareas
+            new_task.user = request.user
+            #esto va a generar un dato dentro de la DB
+            new_task.save()
+            #una vez guardado el dato redirije a la pagina tasks
+            return redirect('tasks')
+        #para comprobar si es un error, y consideremos cuando lo es
+        except ValueError:
+            return render(request, 'create_task.html', {
+                "form": TaskForm,
+                "error": 'Please provide valid data'
+            })
 
 
 def signout(request):

@@ -5,6 +5,8 @@
 {% block content %}
 
 <h1>Create task</h1>
+<!-- mensaje si hay algun error -->
+{{error}}
 
 <!-- con esto ya tengo un formulario para envirlo al backend-->
 <form action="/tasks/create/" method="POST">
