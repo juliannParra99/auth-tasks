@@ -1,5 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1>tareas </h1>
+<!-- el tasks que le paso desde 'Views' -->
+<ul>
+    {% for task in tasks %}
+    <li>
+        <!-- con este if voy hacer un ajuste visual para que cuando si la tarea es importante se muestre en negrita, y sino se muestre normal -->
+        {% if task.important %}
+        <strong>{{task.title}}</strong>
+        {% else %}
+
+            {{task.title}}
+        {% endif %}
+
+        <p>{{task.description}}</p>
+        <p>{{task.user.username}}</p>
+        
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

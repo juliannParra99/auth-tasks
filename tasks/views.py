@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .forms import TaskForm
+#importo el modelo de  las tareas: permite interactuar con la DB y hacer consultas
+from .models import Task
 
 # Create your views here.
 
@@ -39,8 +41,13 @@ def signup(request):
         })
 
 
-def tasks(request):
-    return render(request, 'tasks.html')
+def tasks(request): 
+    #esto va a devolver  las tareas que estan en la DB, y ene ste caso, donde las tareas son del usuario user, y donde  datecompleted__isnull = true, osea las tareas que no han sido completadas: con esto puedo mostrar al usuario las tareas que le faltan hacer; tambien podria mostrar las que ya completo
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull= True )
+
+    return render(request, 'tasks.html', {
+        'tasks': tasks
+    })
 
 
 def create_task(request):
@@ -50,20 +57,13 @@ def create_task(request):
         })
     else:
         try:
-            #con esto ya puedo guardar las tareas desde mi formulario: lo puedo ver desde
-            #el panel de administrador. Con esto  se crea una especie de formulario con los datos que yo le estoy enviando para crear la tarea
+            
             form = TaskForm(request.POST)
-            #print(form)#esto es para que se vea en el ejemplo que la tarea se muestra en la consola; lo comento pq no es seguro
 
-            #el formulario se crea para guardar los datos.
             new_task = form.save(commit=False)
-            #el request.user es por que el modelo de nuestra tabla exigue un usuario que maneje las tareas
             new_task.user = request.user
-            #esto va a generar un dato dentro de la DB
             new_task.save()
-            #una vez guardado el dato redirije a la pagina tasks
             return redirect('tasks')
-        #para comprobar si es un error, y consideremos cuando lo es
         except ValueError:
             return render(request, 'create_task.html', {
                 "form": TaskForm,
@@ -74,11 +74,6 @@ def create_task(request):
 def signout(request):
     logout(request)
     return redirect('home')
-
-# metodo para que el usuario se pueda autenticas (acceda a sus datos si tiene una cuenta ya creada)
-# si la solicitud a esa url es get muestro el formulario, si no, si es una solicutd post, verifico
-# si el usuario es none, osea si no existe, mando el error con el formulario, si existe lo envio a la
-# pagina 'tasks' y guardo su session
 
 
 def signin(request):
