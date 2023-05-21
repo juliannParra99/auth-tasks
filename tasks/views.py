@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # userCreationForm es para crear un usuario y AuthenticationForm es para comprobar si el usurio existe.
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .forms import TaskForm
-#importo el modelo de  las tareas: permite interactuar con la DB y hacer consultas
 from .models import Task
 
 # Create your views here.
@@ -42,7 +41,7 @@ def signup(request):
 
 
 def tasks(request): 
-    #esto va a devolver  las tareas que estan en la DB, y ene ste caso, donde las tareas son del usuario user, y donde  datecompleted__isnull = true, osea las tareas que no han sido completadas: con esto puedo mostrar al usuario las tareas que le faltan hacer; tambien podria mostrar las que ya completo
+    
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull= True )
 
     return render(request, 'tasks.html', {
@@ -70,6 +69,13 @@ def create_task(request):
                 "error": 'Please provide valid data'
             })
 
+
+def task_detail(request,task_id):
+    #aca quiero que me traiga del modelo de tareas el objeto donde el primary key se igual al task id: el get objetct es para que en caso de no estar ese objeto que quiero me de error 404 en lugar de que se rompa todo; este objeto solicita el modelo(db) desde donde queremos consultar; esto evita que el servidor se caiga completamente
+    task = get_object_or_404(Task,pk=task_id)
+    print(task_id)
+    return render(request,'task_detail.html', {'task': task})
+    
 
 def signout(request):
     logout(request)

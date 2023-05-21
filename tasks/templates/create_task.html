@@ -8,11 +8,11 @@
 <!-- mensaje si hay algun error -->
 {{error}}
 
-<!-- con esto ya tengo un formulario para envirlo al backend-->
+
 <form action="/tasks/create/" method="POST">
     {% csrf_token %}
     
-    <!-- formulario  enviado desde views.py -->
+    
     {{form}}
     <button>
         Save

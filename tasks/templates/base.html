@@ -10,9 +10,11 @@
 
     <ul>
         <li><a href='/'>Home</a></li>
-        <li><a href='/tasks'>Tasks</a></li>
         
         {% if user.is_authenticated %}
+        <li><a href='/tasks'>Tasks</a></li>
+        <!-- se agrega ruta para crear tarea cuando el usuario se logea -->
+        <li><a href='/tasks/create/'>Create Task</a></li>
         <li><a href='/logout'>Log out</a></li>
         {% else %}
         <li><a href='/signup'>Sign Up</a></li>

@@ -7,8 +7,9 @@
 <ul>
     {% for task in tasks %}
     <li>
-        <!-- con este if voy hacer un ajuste visual para que cuando si la tarea es importante se muestre en negrita, y sino se muestre normal -->
-        {% if task.important %}
+        <!--aca lo que hago es decir que cuando haga click en la etiqueta A, va a redirijir a la url task_detail (nombrada en urls.py), y el segundo parametro es el parametro que va a recibir:task.id el ID de la tarea, del Modelo  -->
+        <a href="{% url 'task_detail' task.id %}">
+            {% if task.important %}
         <strong>{{task.title}}</strong>
         {% else %}
 
@@ -17,6 +18,8 @@
 
         <p>{{task.description}}</p>
         <p>{{task.user.username}}</p>
+        
+        </a>
         
     </li>
     {% endfor %}
