@@ -40,9 +40,9 @@ def signup(request):
         })
 
 
-def tasks(request): 
-    
-    tasks = Task.objects.filter(user=request.user, datecompleted__isnull= True )
+def tasks(request):
+
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
 
     return render(request, 'tasks.html', {
         'tasks': tasks
@@ -56,7 +56,7 @@ def create_task(request):
         })
     else:
         try:
-            
+
             form = TaskForm(request.POST)
 
             new_task = form.save(commit=False)
@@ -70,12 +70,26 @@ def create_task(request):
             })
 
 
-def task_detail(request,task_id):
-    #aca quiero que me traiga del modelo de tareas el objeto donde el primary key se igual al task id: el get objetct es para que en caso de no estar ese objeto que quiero me de error 404 en lugar de que se rompa todo; este objeto solicita el modelo(db) desde donde queremos consultar; esto evita que el servidor se caiga completamente
-    task = get_object_or_404(Task,pk=task_id)
-    print(task_id)
-    return render(request,'task_detail.html', {'task': task})
-    
+def task_detail(request, task_id):
+    # ahora hago la distincion entre get y post para que se ejecute la logica de solo pintar los datos, o actualizar los datos con el POST
+    if request.method == 'GET':
+        task = get_object_or_404(Task, pk=task_id, user=request.user)
+        # aca se crea un formulario para actualizar los datos del objeto y que le voy a pasar al frontend: este formularios va a tener precargados los datos de la tarea
+        form = TaskForm(instance=task)
+        return render(request, 'task_detail.html', {'task': task, 'form': form})
+    #  en el else voy a colocar el metodo post, para actualizar la tarea
+    else:
+        try:
+            task = get_object_or_404(Task, pk=task_id, user=request.user)
+            #  esto va a tomar los datos del request.POST, va a generar una instancia, osea un nuevo formulario con los nuevos datos; aqui 'task' se refiere a los datos que coinciden  entre el primary key y el task_id
+            form = TaskForm(request.POST, instance=task)
+            # guado el nuevo formulario con esos datos.
+            form.save()
+            return redirect('tasks')
+        except ValueError:
+            return render(request, 'task_detail.html', {'task': task, 'form': form, 'error': 'Error updating task'})
+        
+
 
 def signout(request):
     logout(request)
