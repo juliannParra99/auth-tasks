@@ -24,8 +24,9 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('tasks/', views.tasks, name='tasks'),
     path('tasks/create/', views.create_task, name='create_task'),
-    # parametro dinamico: que se va a guardar en la variable task_id y va a ser de tipo entero: esto por que  vamos a asociar el id de la tarea dentro de la db con ese numero, y nos va a dar sus especificaciones
     path('tasks/<int:task_id>/', views.task_detail, name='task_detail'),
+    path('tasks/<int:task_id>/complete', views.complete_task, name='complete_task'),
+    path('tasks/<int:task_id>/delete', views.delete_task, name='delete_task'),
     path('signin/', views.signin, name='signin'),
     path('logout/', views.signout, name='logout'),
 ]

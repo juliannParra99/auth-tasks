@@ -9,4 +9,15 @@
   <button>Update</button>
 </form>
 
+<!-- el task.id el modelo de mi db -->
+<form action="{% url 'complete_task' task.id %}" method="POST">
+  {% csrf_token %}
+    <button>Complete</button>
+</form>
+
+<form action="{% url 'delete_task' task.id %}" method="POST">
+  {% csrf_token %}
+    <button>Delete</button>
+</form>
+
 {% endblock %}

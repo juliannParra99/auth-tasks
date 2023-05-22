@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .forms import TaskForm
 from .models import Task
+from django.utils import timezone
 
 # Create your views here.
 
@@ -89,6 +90,27 @@ def task_detail(request, task_id):
         except ValueError:
             return render(request, 'task_detail.html', {'task': task, 'form': form, 'error': 'Error updating task'})
         
+# metodo para marcar si la tarea se completo.
+def complete_task(request, task_id):
+    # si estamos recibiendo una tarea primero tenemos que buscar esa tarea.El modelo de tareas que voy a buscar va a ser Task, y el primary key va a ser el task_id; y le pido las tareas que solo correspondan al usuario
+    task = get_object_or_404(Task, pk=task_id, user=request.user)
+    # Si el metodo es post voy a tratar de actualizarlo
+    if request.method == 'POST':
+        # el datecompleted originalmente era null, pero si se le agrega una fecha signifca que ya se cumplio.
+        task.datecompleted = timezone.now()
+        task.save()
+        return redirect('tasks')
+       
+# metodo para eliminar tarea
+def delete_task(request, task_id):
+    # si estamos recibiendo una tarea primero tenemos que buscar esa tarea.El modelo de tareas que voy a buscar va a ser Task, y el primary key va a ser el task_id; y le pido las tareas que solo correspondan al usuario
+    task = get_object_or_404(Task, pk=task_id, user=request.user)
+    # Si el metodo es post voy a tratar de actualizarlo
+    if request.method == 'POST':
+        # a la tarea encontrada, eliminala
+        task.delete()
+        return redirect('tasks')
+       
 
 
 def signout(request):
