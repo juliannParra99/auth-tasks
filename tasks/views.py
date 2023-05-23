@@ -41,12 +41,24 @@ def signup(request):
         })
 
 
+
 def tasks(request):
 
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
 
     return render(request, 'tasks.html', {
-        'tasks': tasks
+        'tasks': tasks,
+        'title': 'Pending Tasks'
+    })
+
+# va a mostrar las tareas que ya han sido completadas
+def tasks_completed(request):
+    #  lo que cambia aca es que el datecompleted_isnull= False, por lo que va a mostrar aquellas que no esten en null, osea que tengan una fecha y por ende ya hayan sido completadas; y que van a estar ordenadas desde la ultima 
+    tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
+    # va a renderizar tasks, pero va a tener una funcionalidad diferente cuando tenga el datecompleted con una fecha asignada
+    return render(request, 'tasks.html', {
+        'tasks': tasks,
+        'title': 'Completed Tasks'
     })
 
 

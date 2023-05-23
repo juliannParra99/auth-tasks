@@ -2,12 +2,12 @@
 
 {% block content %}
 
-<h1>Pending Tasks </h1>
+<h1>{{title}}</h1>
 <!-- el tasks que le paso desde 'Views' -->
 <ul>
     {% for task in tasks %}
     <li>
-        <!--aca lo que hago es decir que cuando haga click en la etiqueta A, va a redirijir a la url task_detail (nombrada en urls.py), y el segundo parametro es el parametro que va a recibir:task.id el ID de la tarea, del Modelo  -->
+        
         <a href="{% url 'task_detail' task.id %}">
             {% if task.important %}
         <strong>{{task.title}}</strong>
@@ -18,6 +18,8 @@
 
         <p>{{task.description}}</p>
         <p>{{task.user.username}}</p>
+        <!-- esto solo lo tienen las tareas que fueron compeltas, las tareas normales no las tiene -->
+        <p>{{task.datecompleted|date:'M j Y:i'}}</p>
         
         </a>
         

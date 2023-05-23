@@ -12,8 +12,10 @@
         <li><a href='/'>Home</a></li>
         
         {% if user.is_authenticated %}
-        <li><a href='/tasks'>Tasks</a></li>
-        <!-- se agrega ruta para crear tarea cuando el usuario se logea -->
+        <!-- aqui uso sintaxis de jinga para usar los nombre que leas aplique en 'urls.py' en lugar de la url completa para que quede mas prolijo -->
+        <li><a href="{% url 'tasks' %}">Pending Tasks</a></li>
+        <li><a href="{% url 'tasks_completed' %}">Completed Tasks</a></li>
+        
         <li><a href='/tasks/create/'>Create Task</a></li>
         <li><a href='/logout'>Log out</a></li>
         {% else %}
