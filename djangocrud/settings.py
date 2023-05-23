@@ -118,6 +118,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# con esto redirijo a mis usuarios cuando el no tiene acceso a cierto contenido para que se logeen.Esto despues de importar el login_required de django; te envia cada vez que quieren acceder a las rutas protegidas con ese decorador : @login_required
+LOGIN_URL = '/signin'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

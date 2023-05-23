@@ -7,6 +7,8 @@ from django.db import IntegrityError
 from .forms import TaskForm
 from .models import Task
 from django.utils import timezone
+# login_required es un decorador especial que nosotros podemos colocar en cada funcion para protegerla, protege su accesp
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -41,7 +43,7 @@ def signup(request):
         })
 
 
-
+@login_required
 def tasks(request):
 
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=True)
@@ -52,6 +54,7 @@ def tasks(request):
     })
 
 # va a mostrar las tareas que ya han sido completadas
+@login_required
 def tasks_completed(request):
     #  lo que cambia aca es que el datecompleted_isnull= False, por lo que va a mostrar aquellas que no esten en null, osea que tengan una fecha y por ende ya hayan sido completadas; y que van a estar ordenadas desde la ultima 
     tasks = Task.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
@@ -61,7 +64,7 @@ def tasks_completed(request):
         'title': 'Completed Tasks'
     })
 
-
+@login_required
 def create_task(request):
     if request.method == 'GET':
         return render(request, 'create_task.html', {
@@ -82,7 +85,7 @@ def create_task(request):
                 "error": 'Please provide valid data'
             })
 
-
+@login_required
 def task_detail(request, task_id):
     # ahora hago la distincion entre get y post para que se ejecute la logica de solo pintar los datos, o actualizar los datos con el POST
     if request.method == 'GET':
@@ -103,6 +106,7 @@ def task_detail(request, task_id):
             return render(request, 'task_detail.html', {'task': task, 'form': form, 'error': 'Error updating task'})
         
 # metodo para marcar si la tarea se completo.
+@login_required
 def complete_task(request, task_id):
     # si estamos recibiendo una tarea primero tenemos que buscar esa tarea.El modelo de tareas que voy a buscar va a ser Task, y el primary key va a ser el task_id; y le pido las tareas que solo correspondan al usuario
     task = get_object_or_404(Task, pk=task_id, user=request.user)
@@ -114,6 +118,7 @@ def complete_task(request, task_id):
         return redirect('tasks')
        
 # metodo para eliminar tarea
+@login_required
 def delete_task(request, task_id):
     # si estamos recibiendo una tarea primero tenemos que buscar esa tarea.El modelo de tareas que voy a buscar va a ser Task, y el primary key va a ser el task_id; y le pido las tareas que solo correspondan al usuario
     task = get_object_or_404(Task, pk=task_id, user=request.user)
@@ -124,7 +129,7 @@ def delete_task(request, task_id):
         return redirect('tasks')
        
 
-
+@login_required
 def signout(request):
     logout(request)
     return redirect('home')
